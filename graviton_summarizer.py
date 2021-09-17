@@ -233,39 +233,41 @@ if submit_button:
 		
 
 		with st.spinner("Generating questions..."):
-			API_URL = "https://api-inference.huggingface.co/models/iarfmoose/t5-base-question-generator"
-			API_URL2 = "https://api-inference.huggingface.co/models/deepset/roberta-base-squad2"
-			headers = {"Authorization": "Bearer api_jLLJUwUJPDnoVEGLlADZIqLhsxJFHEyETh"}
+			try:
+				API_URL = "https://api-inference.huggingface.co/models/iarfmoose/t5-base-question-generator"
+				API_URL2 = "https://api-inference.huggingface.co/models/deepset/roberta-base-squad2"
+				headers = {"Authorization": "Bearer api_jLLJUwUJPDnoVEGLlADZIqLhsxJFHEyETh"}
 
-			def query(url,payload):
-				response = requests.post(url, headers=headers, json=payload)
-				return response.json()
+				def query(url,payload):
+					response = requests.post(url, headers=headers, json=payload)
+					return response.json()
 
-			st.title("Questions 🤔⁉️")	
-			st.caption("Use the following questions to test your new knowledge.")
-			no_of_questions = min(5,len(every_three))
-			answers = []
-			qno = 1
-			
-			for z in range(no_of_questions):
-				question = query(API_URL,{"inputs": f"{every_three[z]}"})
-				st.markdown(f"{qno}. {question[0]['generated_text'].capitalize()}",unsafe_allow_html=True)
-				output = query(API_URL2,{
-			    "inputs": {
-					"question": f"{question}",
-					"context": f"{every_three[z]}",
-								},
-							})
-				answers.append(output["answer"].capitalize())
-				qno += 1
+				st.title("Questions 🤔⁉️")	
+				st.caption("Use the following questions to test your new knowledge.")
+				no_of_questions = min(5,len(every_three))
+				answers = []
+				qno = 1
 
-			answers_expander = st.expander("Answers 👀",expanded=False)
-			
-			ano = 1
-			for a in answers:
-				answers_expander.markdown(f"{ano}. {a}")	
-				ano += 1
+				for z in range(no_of_questions):
+					question = query(API_URL,{"inputs": f"{every_three[z]}"})
+					st.markdown(f"{qno}. {question[0]['generated_text'].capitalize()}")
+					output = query(API_URL2,{
+				    "inputs": {
+						"question": f"{question}",
+						"context": f"{every_three[z]}",
+									},
+								})
+					answers.append(output["answer"].capitalize())
+					qno += 1
 
+				answers_expander = st.expander("Answers 👀",expanded=False)
+
+				ano = 1
+				for a in answers:
+					answers_expander.markdown(f"{ano}. {a}")	
+					ano += 1
+			except:
+				st.info("No questions available currently.")
 
 
 
