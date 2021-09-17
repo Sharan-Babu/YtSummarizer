@@ -1,0 +1,7 @@
+pytube
+youtube_transcript_api 
+gensim==3.8.3
+streamlit
+bokeh
+streamlit-bokeh-events
+moviepy
