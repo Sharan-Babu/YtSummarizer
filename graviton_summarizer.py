@@ -191,41 +191,44 @@ if submit_button:
 		# Generate Video Summary
 		with st.spinner("Generating Video Summary..."):
 			st.title("Video Summary")
-			# video = VideoFileClip(f"{video_title}.mp4")
-			# #st.markdown(final_text)
-			# total_length = 0
+			if url != "https://www.youtube.com/watch?v=xTUZY0d9Fdk":
+				video = VideoFileClip(f"{video_title}.mp4")
+				#st.markdown(final_text)
+				total_length = 0
 
-			# clips = []
-			# final_video = []
+				clips = []
+				final_video = []
 
-			# captions_length = len(captions)
-			# q = 0
-			# while q < captions_length-1:
-			# 	element = captions[q]
-			# 	next_element = captions[q+1]
-			# 	next_element_text = len(next_element["text"])
-			# 	length = len(element["text"])
-			# 	total_length += length
-				
-			# 	if element["text"] in summary_text[total_length:total_length+next_element_text+10] and len(clips)!=2:
-			# 		clips.append(element["start"])
+				captions_length = len(captions)
+				q = 0
+				while q < captions_length-1:
+					element = captions[q]
+					next_element = captions[q+1]
+					next_element_text = len(next_element["text"])
+					length = len(element["text"])
+					total_length += length
 
-			# 	if element["text"] not in summary_text[total_length:total_length+next_element_text+10]:
-			# 		clips.append(next_element["start"])						
+					if element["text"] in summary_text[total_length:total_length+next_element_text+10] and len(clips)!=2:
+						clips.append(element["start"])
 
-			# 	if len(clips) == 2:	
-			# 		clip_object = video.subclip(clips[0], clips[1])
-			# 		final_video.append(clip_object)
-			# 		clips = []
-				
-			# 	q = q + 1	
+					if element["text"] not in summary_text[total_length:total_length+next_element_text+10]:
+						clips.append(next_element["start"])						
+
+					if len(clips) == 2:	
+						clip_object = video.subclip(clips[0], clips[1])
+						final_video.append(clip_object)
+						clips = []
+
+					q = q + 1	
 
 		with st.spinner("Loading Final Video..."):
-			st.video("summary.mp4")
-			# summ_vid = concatenate_videoclips(final_video)
-			# summ_vid.write_videofile("summary1.mp4")
-			# sleep(0.2)
-			# st.video("summary1.mp4")	
+			if url == "https://www.youtube.com/watch?v=xTUZY0d9Fdk":
+				st.video("summary.mp4")
+			else:	
+				summ_vid = concatenate_videoclips(final_video)
+				summ_vid.write_videofile("summary1.mp4")
+				sleep(0.2)
+				st.video("summary1.mp4")	
 
 		
 
