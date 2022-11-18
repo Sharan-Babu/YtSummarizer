@@ -19,7 +19,7 @@ st.title("Yt Summarizer 🎥🎞️")
 
 # Text to text translation
 def text_to_text_translation(sentence,target_language):
-	subscription_key = "3e7d57d42487401e9ea1b73c0b0c4c75"
+	subscription_key = "434cfb7bcbb848bcb06f21cf4c73c4af"
 	# Replace the above with your key
 	endpoint = "https://api.cognitive.microsofttranslator.com"
 
