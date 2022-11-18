@@ -236,7 +236,7 @@ if submit_button:
 			try:
 				API_URL = "https://api-inference.huggingface.co/models/iarfmoose/t5-base-question-generator"
 				API_URL2 = "https://api-inference.huggingface.co/models/deepset/roberta-base-squad2"
-				headers = {"Authorization": "Bearer api_jLLJUwUJPDnoVEGLlADZIqLhsxJFHEyETh"}
+				headers = {"Authorization": "Bearer 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"}
 
 				def query(url,payload):
 					response = requests.post(url, headers=headers, json=payload)
