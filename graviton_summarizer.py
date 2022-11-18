@@ -160,14 +160,15 @@ if submit_button:
 			
 			for x in temp:
 				if i%3 == 0:
-					pic_time = captions[j]["start"] + captions[j]["duration"]
-					frame_image = VideoFileClip(f"{video_title}.mp4")
-					frame_image.save_frame("frame.png",t=pic_time)
-					summary_expander.image("frame.png",width=300)
-					#summary_expander.markdown("\n\n")
-					display_text.append("\n\n")
-					every_three.append(my_string)
-					my_string = ""
+					if j < len(captions):
+						pic_time = captions[j]["start"] + captions[j]["duration"]
+						frame_image = VideoFileClip(f"{video_title}.mp4")
+						frame_image.save_frame("frame.png",t=pic_time)
+						summary_expander.image("frame.png",width=300)
+						#summary_expander.markdown("\n\n")
+						display_text.append("\n\n")
+						every_three.append(my_string)
+						my_string = ""
 				
 
 				my_string += x
