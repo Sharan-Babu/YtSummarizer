@@ -47,6 +47,7 @@ def text_to_text_translation(sentence,target_language):
 	response = request.json()
 	#st.json(response)
 	source_language = "en" #response[0]['detectedLanguage']['language']
+	st.write(response)
 	result = response[0]['translations'][0]['text']
 	return source_language, result
 
