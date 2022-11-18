@@ -78,16 +78,24 @@ if submit_button:
 			mp4files = yt.streams.filter(file_extension='mp4', progressive=True)
 
 			video = mp4files[-1]
-			video.download(skip_existing=True)	
+			#st.write(video)
+			video.download(filename="d1.mp4",skip_existing=True)	
 
 			st.info("Video fetched successfully")
 
-			transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
-			for t in transcript_list:
-				captions = t.translate('en').fetch()
-				break
+			# transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+			# for t in transcript_list:
+			# 	captions = t.translate('en').fetch()
+			# 	break
+			# captions1 = yt.captions.get_by_language_code('en')
+			# st.write(f"c1:{captions}")
+			# st.write(f"c2: {captions1}")
+			# st.write(captions1.generate_srt_captions())
+			# st.write(captions.generate_srt_captions())
+			captions = YouTubeTranscriptApi.get_transcript(video_id)
+			#st.write(captions)
 		
-		#st.json(captions)	
+		
 
 		with st.spinner("Captions..."):
 			full_text_list = []
@@ -115,15 +123,19 @@ if submit_button:
 				else:
 					display_text.append(x+".")	
 				i += 1
+			req_array = display_text[:]	
 			display_text = "".join(display_text)
+			#st.markdown(display_text)
+
+			
 			punctuated_expander.caption(f"Text Length: {len(display_text)}")
 			punctuated_expander.markdown(display_text)
-		
+
 		with st.spinner("Generating questions..."):
 			try:
 				API_URL = "https://api-inference.huggingface.co/models/iarfmoose/t5-base-question-generator"
 				API_URL2 = "https://api-inference.huggingface.co/models/deepset/roberta-base-squad2"
-				headers = {"Authorization": "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"}
+				headers = {"Authorization": "Bearer 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"}
 
 				def query(url,payload):
 					response = requests.post(url, headers=headers, json=payload)
@@ -131,17 +143,17 @@ if submit_button:
 
 				st.title("Questions 🤔⁉️")	
 				st.caption("Use the following questions to test your new knowledge.")
-				no_of_questions = min(5,len(every_three))
+				no_of_questions = min(5,len(req_array))
 				answers = []
 				qno = 1
 
 				for z in range(no_of_questions):
-					question = query(API_URL,{"inputs": f"{every_three[z]}"})
+					question = query(API_URL,{"inputs": f"{req_array[z]}"})
 					st.markdown(f"{qno}. {question[0]['generated_text'].capitalize()}")
 					output = query(API_URL2,{
 				    "inputs": {
 						"question": f"{question}",
-						"context": f"{every_three[z]}",
+						"context": f"{req_array[z]}",
 									},
 								})
 					answers.append(output["answer"].capitalize())
@@ -156,6 +168,7 @@ if submit_button:
 			except:
 				st.info("No questions available currently.")
 
+
 		with st.spinner("Generating summary..."):
 			summary_expander = st.expander("Summary:",expanded=True)
 			
@@ -166,6 +179,7 @@ if submit_button:
 
 			# line = summary_expander.number_input("Enter line no. to be read: ",1,len(summary_list)-1)
 			# line = int(line) - 1
+			#st.write(summary_list)
 
 			
 			# Audio Output
@@ -197,15 +211,14 @@ if submit_button:
 			
 			for x in temp:
 				if i%3 == 0:
-					if j < len(captions):
-						pic_time = captions[j]["start"] + captions[j]["duration"]
-						frame_image = VideoFileClip(f"{video_title}.mp4")
-						frame_image.save_frame("frame.png",t=pic_time)
-						summary_expander.image("frame.png",width=300)
-						#summary_expander.markdown("\n\n")
-						display_text.append("\n\n")
-						every_three.append(my_string)
-						my_string = ""
+					pic_time = captions[j]["start"] + captions[j]["duration"]
+					frame_image = VideoFileClip("d1.mp4")
+					frame_image.save_frame("frame.png",t=pic_time)
+					summary_expander.image("frame.png",width=300)
+					#summary_expander.markdown("\n\n")
+					display_text.append("\n\n")
+					every_three.append(my_string)
+					my_string = ""
 				
 
 				my_string += x
@@ -230,7 +243,7 @@ if submit_button:
 		with st.spinner("Generating Video Summary..."):
 			st.title("Video Summary")
 			if url != "https://www.youtube.com/watch?v=xTUZY0d9Fdk":
-				video = VideoFileClip(f"{video_title}.mp4")
+				video = VideoFileClip(f"d1.mp4")
 				#st.markdown(final_text)
 				total_length = 0
 
@@ -267,10 +280,4 @@ if submit_button:
 				summ_vid.write_videofile("summary1.mp4")
 				sleep(0.2)
 				st.video("summary1.mp4")	
-
-		
-
-		
-
-
 
