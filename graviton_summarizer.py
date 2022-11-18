@@ -15,7 +15,7 @@ from time import sleep
 # Set page configs
 st.set_page_config(page_title="Summarizer", page_icon="▶️")
 
-st.title("Graviton Summarizer 🎥🎞️")
+st.title("Yt Summarizer 🎥🎞️")
 
 # Text to text translation
 def text_to_text_translation(sentence,target_language):
