@@ -23,7 +23,7 @@ def text_to_text_translation(sentence,target_language):
 	# Replace the above with your key
 	endpoint = "https://api.cognitive.microsofttranslator.com"
 
-	location = "eastus"
+	location = "eastus2"
 
 	path = '/translate'
 	constructed_url = endpoint + path
